@@ -9,10 +9,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GenreRepository")
- * @ApiResource()
+ * @ApiResource(
+ *    collectionOperations={"get"},
+ *     itemOperations={"get"},
+ *     normalizationContext={
+ *         "groups" = {"listGenreSimple"}
+ * }
+ * 
+ * )
  * @UniqueEntity(
  *    fields={"libelle"},
  *    message="Il existe déjà un genre avec ce libelle {{ value }}, veuillez saisir un autre libellé."
@@ -39,6 +47,7 @@ class Genre
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Livre", mappedBy="genre")
      * @Groups({"listGenrefull"})
+     *  @ApiSubresource()
      */
     private $livres;
 
